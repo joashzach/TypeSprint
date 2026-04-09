@@ -32,9 +32,11 @@ export default function TypingTestWrapper() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center gap-4 text-center">
-        <Loader2 className="w-12 h-12 animate-spin text-accent" />
-        <p className="text-lg font-medium text-primary animate-pulse">Generating your custom typing challenge...</p>
+      <div className="flex flex-col items-center justify-center gap-5 text-center min-h-[60vh]">
+        <Loader2 className="w-10 h-10 animate-spin text-primary" />
+        <p className="text-sm font-medium text-muted-foreground tracking-wide">
+          Generating your custom typing challenge…
+        </p>
       </div>
     );
   }

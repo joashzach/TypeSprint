@@ -4,23 +4,29 @@ interface LiveMetricsProps {
   wpm: number;
   accuracy: number;
   timeLeft: number;
+  errors: number;
 }
 
-export default function LiveMetrics({ wpm, accuracy, timeLeft }: LiveMetricsProps) {
+function MetricCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center gap-8">
-      <MetricItem label="Time" value={`${timeLeft}s`} />
-      <MetricItem label="WPM" value={wpm.toString()} />
-      <MetricItem label="ACC" value={`${accuracy}%`} />
+    <div className="flex flex-col items-center justify-center gap-1 w-24 h-16 bg-card border border-primary/15 rounded-sm px-3">
+      <p className="text-[9px] font-semibold uppercase tracking-widest text-muted-foreground leading-none">
+        {label}
+      </p>
+      <p className="text-xl font-bold tabular-nums tracking-tight text-foreground leading-none">
+        {value}
+      </p>
     </div>
   );
 }
 
-function MetricItem({ label, value }: { label: string, value: string }) {
+export default function LiveMetrics({ wpm, accuracy, timeLeft, errors }: LiveMetricsProps) {
   return (
-    <div className="flex flex-col gap-0">
-      <p className="text-[9px] font-black uppercase tracking-widest text-primary/40">{label}</p>
-      <p className="text-xl font-black tabular-nums tracking-tighter text-primary uppercase">{value}</p>
+    <div className="flex items-center gap-2">
+      <MetricCard label="Time" value={`${timeLeft}s`} />
+      <MetricCard label="WPM" value={wpm.toString()} />
+      <MetricCard label="Accuracy" value={`${accuracy}%`} />
+      <MetricCard label="Errors" value={errors.toString()} />
     </div>
   );
 }

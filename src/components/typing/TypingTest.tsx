@@ -3,9 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import LiveMetrics from './LiveMetrics';
 import ResultsSummary from './ResultsSummary';
-import VirtualKeyboard from './VirtualKeyboard';
-import { Button } from '@/components/ui/button';
-import { RefreshCcw, ShieldAlert, Eye, EyeOff } from 'lucide-react';
+import { RefreshCcw, ShieldAlert } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface TypingTestProps {
@@ -29,13 +27,10 @@ export default function TypingTest({ passage, onRestart }: TypingTestProps) {
   const [timeLeft, setTimeLeft] = useState(60);
   const [isFinished, setIsFinished] = useState(false);
   const [errorsCount, setErrorsCount] = useState(0);
-  const [pressedKey, setPressedKey] = useState<string | null>(null);
-  const [showKeyboard, setShowKeyboard] = useState(true);
   const [isErrorFlash, setIsErrorFlash] = useState(false);
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-
 
   const calculateWPM = useCallback((input: string, timeSeconds: number) => {
     if (timeSeconds <= 0) return 0;
@@ -73,14 +68,11 @@ export default function TypingTest({ passage, onRestart }: TypingTestProps) {
     };
   }, [startTime, isFinished, endTime, endTest]);
 
-  // Handle page scrolling to keep the current character in view
+  // Scroll to keep current character in view
   useEffect(() => {
     const currentSpan = document.getElementById(`char-${userInput.length}`);
     if (currentSpan) {
-      currentSpan.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center'
-      });
+      currentSpan.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [userInput]);
 
@@ -111,31 +103,19 @@ export default function TypingTest({ passage, onRestart }: TypingTestProps) {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
-    
     if (value.length < userInput.length) {
       setUserInput(value);
       setIsErrorFlash(false);
       return;
     }
-
     const lastCharTyped = value[value.length - 1];
     processInput(lastCharTyped);
   };
 
-  const handleVirtualKeyClick = (key: string) => {
-    processInput(key);
-    inputRef.current?.focus();
-  };
-
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    setPressedKey(e.key);
     if (e.shiftKey && e.key === 'R') {
       handleRestart();
     }
-  };
-
-  const handleKeyUp = () => {
-    setPressedKey(null);
   };
 
   const handleRestart = () => {
@@ -145,7 +125,6 @@ export default function TypingTest({ passage, onRestart }: TypingTestProps) {
     setTimeLeft(60);
     setIsFinished(false);
     setErrorsCount(0);
-    setPressedKey(null);
     setIsErrorFlash(false);
     onRestart();
   };
@@ -158,9 +137,8 @@ export default function TypingTest({ passage, onRestart }: TypingTestProps) {
       errors: errorsCount,
       timeSpent,
       correctChars: userInput.length,
-      totalCharsTyped: userInput.length + errorsCount
+      totalCharsTyped: userInput.length + errorsCount,
     };
-
     return <ResultsSummary stats={stats} onRestart={handleRestart} />;
   }
 
@@ -169,85 +147,68 @@ export default function TypingTest({ passage, onRestart }: TypingTestProps) {
 
   return (
     <div className="w-full max-w-5xl mx-auto flex flex-col bg-background">
-      <div className="flex items-center justify-between py-6 px-4 border-b border-primary/10 shrink-0 mb-8 sticky top-0 bg-background/90 backdrop-blur-md z-[100]">
-        <div className="flex items-center gap-12">
-          <LiveMetrics 
-            wpm={currentWpm} 
-            accuracy={currentAccuracy} 
-            timeLeft={timeLeft} 
-          />
-        </div>
-        
-        <div className="flex items-center gap-6">
-          <Button 
-            variant="ghost" 
-            size="sm"
-            onClick={() => setShowKeyboard(!showKeyboard)}
-            className="text-primary/40 hover:text-primary transition-colors h-8"
-          >
-            {showKeyboard ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
-            <span className="text-[10px] font-black uppercase">HUD</span>
-          </Button>
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={handleRestart} 
-            className="border-primary/20 text-primary hover:bg-primary hover:text-foreground rounded-none h-8"
-          >
-            <RefreshCcw className="w-3 h-3 mr-2" />
-            <span className="text-[10px] font-black uppercase">Reset</span>
-          </Button>
-        </div>
+      {/* Stats bar */}
+      <div className="flex items-center justify-between py-4 px-4 border-b border-primary/10 shrink-0 mb-8 sticky top-16 bg-background/95 backdrop-blur-md z-[100]">
+        <LiveMetrics
+          wpm={currentWpm}
+          accuracy={currentAccuracy}
+          timeLeft={timeLeft}
+          errors={errorsCount}
+        />
+
+        <button
+          onClick={handleRestart}
+          className="flex items-center gap-2 w-24 h-16 justify-center bg-card border border-primary/15 rounded-sm px-3 text-muted-foreground hover:border-primary/40 hover:text-foreground transition-all duration-150"
+        >
+          <RefreshCcw className="w-3.5 h-3.5 shrink-0" />
+          <span className="text-[10px] font-semibold uppercase tracking-widest">Reset</span>
+        </button>
       </div>
 
-      <div className="flex flex-col items-center gap-8 px-4 pb-48">
+      <div className="flex flex-col items-center gap-8 px-4 pb-8">
         <div className={cn(
           "w-full max-w-4xl flex flex-col gap-8 transition-all duration-300",
           isErrorFlash && "animate-shake"
         )}>
+          {/* Error flash bar */}
           <div className={cn(
-            "fixed top-0 left-0 w-full h-1.5 z-[110] transition-all duration-200",
-            isErrorFlash ? "bg-destructive shadow-[0_4px_30px_rgba(239,68,68,0.8)]" : "bg-transparent"
+            "fixed top-0 left-0 w-full h-1 z-[110] transition-all duration-200",
+            isErrorFlash ? "bg-destructive shadow-[0_4px_20px_rgba(239,68,68,0.6)]" : "bg-transparent"
           )} />
 
-          {showKeyboard && (
-            <div className="animate-in fade-in slide-in-from-top-4 duration-500">
-              <VirtualKeyboard 
-                activeKey={pressedKey} 
-                className="opacity-70 scale-95" 
-                onKeyClick={handleVirtualKeyClick}
-              />
-            </div>
-          )}
-
-          <div 
-            className="relative cursor-text clean-frame min-h-[400px]"
+          {/* Typing area */}
+          <div
+            className="relative cursor-text bg-card border border-primary/15 rounded-sm shadow-[0_2px_16px_rgba(0,0,0,0.3)]"
             onClick={() => inputRef.current?.focus()}
           >
+            {/* Error label */}
             <div className={cn(
-              "absolute -top-10 left-0 transition-all duration-300 flex items-center gap-2",
-              isErrorFlash ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"
+              "absolute -top-8 left-0 transition-all duration-300 flex items-center gap-2",
+              isErrorFlash ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1"
             )}>
               <ShieldAlert className="w-3 h-3 text-destructive" />
-              <span className="text-[9px] font-black uppercase text-destructive tracking-[0.2em]">Input Error: Correction Required</span>
+              <span className="text-[9px] font-semibold uppercase text-destructive tracking-[0.15em]">
+                Wrong key — keep going
+              </span>
             </div>
 
-            <div className="p-10">
-              <div className="text-3xl md:text-4xl leading-[1.8] font-mono-typing tracking-tight select-none text-left font-medium">
+            <div className="p-5 md:p-8">
+              <div className="text-2xl md:text-3xl leading-relaxed tracking-wide select-none text-left font-normal"
+                style={{ fontFamily: 'var(--font-poppins), Poppins, sans-serif' }}>
                 {passage.split('').map((char, i) => {
                   const isTyped = i < userInput.length;
                   const isCurrent = i === userInput.length;
-                  
+
                   let className = "char-untyped";
                   if (isTyped) className = "char-correct";
                   if (isCurrent) className = "char-current";
 
                   return (
-                    <span 
-                      key={i} 
+                    <span
+                      key={i}
                       id={`char-${i}`}
                       className={cn(
-                        className, 
+                        className,
                         isCurrent && isErrorFlash && "char-incorrect text-destructive inline-block"
                       )}
                     >
@@ -264,7 +225,6 @@ export default function TypingTest({ passage, onRestart }: TypingTestProps) {
               value={userInput}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
-              onKeyUp={handleKeyUp}
               className="absolute inset-0 opacity-0 cursor-default resize-none pointer-events-none"
               autoFocus
               spellCheck={false}

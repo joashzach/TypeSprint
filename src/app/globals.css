@@ -6,7 +6,7 @@
   :root {
     --background: 0 0% 5%; /* Obsidian Black */
     --foreground: 174 20% 88%; /* Light Cyan */
-    --card: 0 0% 8%;
+    --card: 0 0% 9%;
     --card-foreground: 174 20% 88%;
     --popover: 0 0% 8%;
     --popover-foreground: 174 20% 88%;
@@ -23,7 +23,7 @@
     --border: 174 30% 18%;
     --input: 174 30% 18%;
     --ring: 174 73% 14%;
-    --radius: 0rem;
+    --radius: 0.25rem;
   }
 }
 
@@ -81,7 +81,7 @@
 }
 
 .clean-frame {
-  @apply bg-black border border-primary/20;
+  @apply bg-card border border-primary/15 rounded-sm shadow-[0_2px_16px_rgba(0,0,0,0.3)];
 }
 
 .font-mono-typing {
