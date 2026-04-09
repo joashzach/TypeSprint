@@ -20,7 +20,7 @@ function MetricItem({ label, value }: { label: string, value: string }) {
   return (
     <div className="flex flex-col gap-0">
       <p className="text-[9px] font-black uppercase tracking-widest text-primary/40">{label}</p>
-      <p className="text-xl font-black tabular-nums tracking-tighter text-primary uppercase italic">{value}</p>
+      <p className="text-xl font-black tabular-nums tracking-tighter text-primary uppercase">{value}</p>
     </div>
   );
 }

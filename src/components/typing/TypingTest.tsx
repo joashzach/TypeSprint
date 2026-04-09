@@ -35,22 +35,7 @@ export default function TypingTest({ passage, onRestart }: TypingTestProps) {
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  useEffect(() => {
-    // Vine Boom Sound (v70972)
-    const audio = new Audio('https://www.myinstants.com/media/sounds/vine-boom.mp3');
-    audio.preload = 'auto';
-    audio.volume = 1.0; 
-    audioRef.current = audio;
-  }, []);
-
-  const playErrorSound = useCallback(() => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = 0;
-      audioRef.current.play().catch(() => {});
-    }
-  }, []);
 
   const calculateWPM = useCallback((input: string, timeSeconds: number) => {
     if (timeSeconds <= 0) return 0;
@@ -120,10 +105,9 @@ export default function TypingTest({ passage, onRestart }: TypingTestProps) {
     } else {
       setErrorsCount(prev => prev + 1);
       setIsErrorFlash(true);
-      playErrorSound();
       setTimeout(() => setIsErrorFlash(false), 200);
     }
-  }, [isFinished, startTime, passage, userInput.length, playErrorSound, endTest]);
+  }, [isFinished, startTime, passage, userInput.length, endTest]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
@@ -208,7 +192,7 @@ export default function TypingTest({ passage, onRestart }: TypingTestProps) {
             variant="outline" 
             size="sm"
             onClick={handleRestart} 
-            className="border-primary/20 text-primary hover:bg-primary hover:text-black rounded-none h-8"
+            className="border-primary/20 text-primary hover:bg-primary hover:text-foreground rounded-none h-8"
           >
             <RefreshCcw className="w-3 h-3 mr-2" />
             <span className="text-[10px] font-black uppercase">Reset</span>

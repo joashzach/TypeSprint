@@ -18,7 +18,7 @@ export default function ResultsSummary({ stats, onRestart }: ResultsSummaryProps
             <Trophy className="w-4 h-4" />
             Evaluation Complete
           </div>
-          <h2 className="text-4xl font-black italic uppercase tracking-tighter text-primary">Summary</h2>
+          <h2 className="text-4xl font-black uppercase tracking-tighter text-primary">Summary</h2>
         </div>
       </div>
 
@@ -42,11 +42,11 @@ export default function ResultsSummary({ stats, onRestart }: ResultsSummaryProps
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4 pt-4">
-        <Button size="lg" onClick={onRestart} className="flex-1 h-14 rounded-none bg-primary hover:bg-primary/90 text-black font-black uppercase italic tracking-wider transition-all">
+        <Button size="lg" onClick={onRestart} className="flex-1 h-14 rounded-none bg-primary hover:bg-primary/90 text-foreground font-black uppercase tracking-wider transition-all">
           <RefreshCcw className="w-5 h-5 mr-3" />
           Re-Initiate
         </Button>
-        <Button size="lg" variant="outline" className="flex-1 h-14 rounded-none border border-primary/30 text-primary font-black uppercase italic tracking-wider hover:bg-primary hover:text-black transition-all">
+        <Button size="lg" variant="outline" className="flex-1 h-14 rounded-none border border-primary/30 text-primary font-black uppercase tracking-wider hover:bg-primary hover:text-foreground transition-all">
           <Share2 className="w-5 h-5 mr-3" />
           Export Data
         </Button>
@@ -65,7 +65,7 @@ function ResultBox({ label, value, highlight }: { label: string, value: string |
         "text-[10px] font-black uppercase tracking-widest",
         highlight ? "text-primary" : "text-muted-foreground"
       )}>{label}</p>
-      <p className="text-4xl font-black tracking-tighter tabular-nums uppercase italic text-primary">{value}</p>
+      <p className="text-4xl font-black tracking-tighter tabular-nums uppercase text-primary">{value}</p>
     </div>
   );
 }
