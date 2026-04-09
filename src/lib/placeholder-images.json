@@ -1,0 +1,10 @@
+{
+  "placeholderImages": [
+    {
+      "id": "hero-typing",
+      "description": "A close-up of hands typing on a modern mechanical keyboard with blue lighting.",
+      "imageUrl": "https://images.unsplash.com/photo-1626958390943-a70309376444?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxtZWNoYW5pY2FsJTIwa2V5Ym9hcmR8ZW58MHx8fHwxNzcyMDk3ODE0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "mechanical keyboard"
+    }
+  ]
+}

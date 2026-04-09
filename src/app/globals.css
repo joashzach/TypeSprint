@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 5%; /* Obsidian Black */
+    --foreground: 76 32% 85%; /* Light Olive */
+    --card: 0 0% 8%;
+    --card-foreground: 76 32% 85%;
+    --popover: 0 0% 8%;
+    --popover-foreground: 76 32% 85%;
+    --primary: 76 32% 45%; /* Olive Green */
+    --primary-foreground: 0 0% 5%;
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 76 32% 85%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 76 32% 50%;
+    --accent: 76 32% 45%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 76 32% 20%;
+    --input: 76 32% 20%;
+    --ring: 76 32% 45%;
+    --radius: 0rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    @apply bg-background text-foreground antialiased selection:bg-primary selection:text-primary-foreground overflow-x-hidden min-h-screen;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+.animate-shake {
+  animation: shake 0.1s ease-in-out 0s 2;
+}
+
+.typing-cursor {
+  @apply inline-block w-0.5 h-[1.2em] bg-primary align-middle animate-pulse;
+}
+
+.char-correct {
+  @apply text-foreground/30 transition-colors duration-200;
+}
+
+.char-untyped {
+  @apply text-foreground;
+}
+
+.char-current {
+  @apply text-primary font-bold underline decoration-2 underline-offset-8;
+}
+
+.char-incorrect {
+  @apply text-destructive font-black;
+}
+
+.clean-frame {
+  @apply bg-black border border-primary/20;
+}
+
+.font-mono-typing {
+  font-family: 'JetBrains Mono', 'Roboto Mono', monospace;
+}
